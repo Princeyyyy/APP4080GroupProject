@@ -1,34 +1,40 @@
+
+// DashboardActivity.java
 package com.example.moodbooster;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class DashboardActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        mAuth = FirebaseAuth.getInstance();
 
-        ImageButton logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(v -> onLogoutClick());
-    }
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-    private void onLogoutClick() {
-        mAuth.signOut();
-        Toast.makeText(DashboardActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_home) {
+                selectedFragment = new HomeFragment();
+            } else if (itemId == R.id.navigation_meditation) {
+                selectedFragment = new MeditationFragment();
+            } else if (itemId == R.id.navigation_profile) {
+                selectedFragment = new ProfileFragment();
+            }
+            getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, selectedFragment).commit();
+            return true;
+        });
+
+        // Set default selection
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
     }
 }

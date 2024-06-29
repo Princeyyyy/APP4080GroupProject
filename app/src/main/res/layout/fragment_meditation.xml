@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/timerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="48sp"
+        android:text="00:00" />
+
+    <Button
+        android:id="@+id/startStopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timerTextView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Start" />
+
+    <Spinner
+        android:id="@+id/durationSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startStopButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/soundLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/durationSpinner"
+        android:layout_marginTop="24dp"
+        android:text="Meditation Sounds:" />
+
+    <Spinner
+        android:id="@+id/soundSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/soundLabel"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/playSoundButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/soundSpinner"
+        android:layout_marginTop="16dp"
+        android:text="Play" />
+
+    <Button
+        android:id="@+id/stopSoundButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/soundSpinner"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@id/playSoundButton"
+        android:layout_marginStart="16dp"
+        android:text="Stop" />
+
+</RelativeLayout>
