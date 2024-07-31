@@ -1,16 +1,12 @@
-import 'package:badges/badges.dart' as badges;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as flutter_material;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import '../utils.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -40,7 +36,6 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -78,13 +73,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Center(
                               child: Text(
-                            "${jumlah[index]}",
-                            style: GoogleFonts.montserrat(
-                              letterSpacing: 1,
-                              fontWeight: FontWeight.w500,
-                              color: selectedIndex == index ? white : black,
-                            ),
-                          )),
+                                "${jumlah[index]}",
+                                style: GoogleFonts.montserrat(
+                                  letterSpacing: 1,
+                                  fontWeight: FontWeight.w500,
+                                  color: selectedIndex == index ? white : black,
+                                ),
+                              )),
                         ),
                       );
                     },
@@ -96,41 +91,37 @@ class _HomePageState extends State<HomePage> {
                 CarouselSlider.builder(
                   itemCount: quotes[selectedIndex].length,
                   itemBuilder: (BuildContext context, int index, int realIdx) {
-                    return Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                              color: teal,
-                              blurRadius: 6,
-                              offset: Offset(0, 6),
+                    return Container(  // Remove the Expanded widget here
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        boxShadow: const [
+                          BoxShadow(
+                            color: teal,
+                            blurRadius: 6,
+                            offset: Offset(0, 6),
+                          ),
+                        ],
+                        color: index.isEven ? blueish: pinkish,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(16.0),
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.format_quote, color: Colors.white),
+                            Text(
+                              quotes[selectedIndex][index],
+                              style: GoogleFonts.montserrat(
+                                letterSpacing: 1,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ],
-                          color: index.isEven ? blueish: pinkish,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(
-                              16.0,
-                            ),
-                          ),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.format_quote,color: Colors.white,),
-                              Text(
-                                quotes[selectedIndex][index],
-                                style: GoogleFonts.montserrat(
-                                  letterSpacing: 1,
-                                  fontWeight: FontWeight.w900,
-                                  color: index.isEven ? white : white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     );
@@ -143,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                     autoPlayCurve: Curves.fastOutSlowIn,
                     enableInfiniteScroll: true,
                     autoPlayAnimationDuration:
-                        const Duration(milliseconds: 800),
+                    const Duration(milliseconds: 800),
                     viewportFraction: 0.7,
                   ),
                 ),

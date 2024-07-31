@@ -3,13 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:lottie/lottie.dart';
 
 import '../utils.dart';
 
 class MeditationTimer extends StatefulWidget {
   final String meditationType;
 
-  const MeditationTimer({Key? key, required this.meditationType}) : super(key: key);
+  const MeditationTimer({super.key, required this.meditationType});
 
   @override
   State<MeditationTimer> createState() => _MeditationTimerState();
@@ -19,13 +20,13 @@ class _MeditationTimerState extends State<MeditationTimer> {
   bool isActive = false;
   int _seconds = 0;
   int _totalSeconds = 0;
-  late Timer _timer;
+  Timer? _timer;
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool isPlaying = false;
 
   List<int> presetTimes = [60, 180, 300]; // 1 min, 3 min, 5 min in seconds
 
-  late IconData meditationIcon;
+  late String meditationIcon;
   late Color meditationColor;
 
   @override
@@ -37,26 +38,26 @@ class _MeditationTimerState extends State<MeditationTimer> {
   void _setMeditationProperties() {
     switch (widget.meditationType.toLowerCase()) {
       case 'fireplace':
-        meditationIcon = Icons.fireplace;
+        meditationIcon = "assets/fire.json";
         meditationColor = Colors.orange;
         break;
       case 'ocean':
-        meditationIcon = Icons.water;
+        meditationIcon = "assets/ocean.json";
         meditationColor = Colors.blue;
         break;
       case 'wind':
-        meditationIcon = Icons.air;
+        meditationIcon = "assets/wind.json";
         meditationColor = Colors.greenAccent;
         break;
       default:
-        meditationIcon = Icons.spa;
+        meditationIcon = "assets/meditation.json";
         meditationColor = teal;
     }
   }
 
   @override
   void dispose() {
-    if (_timer.isActive) _timer.cancel();
+    _timer?.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -69,14 +70,19 @@ class _MeditationTimerState extends State<MeditationTimer> {
       isActive = true;
       isPlaying = true;
     });
-    _audioPlayer.play(AssetSource('${widget.meditationType.toLowerCase()}.mp3'));
-    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+
+    // Find assets for the thingy:
+    // _audioPlayer.play(AssetSource('${widget.meditationType.toLowerCase()}.mp3'));
+
+    _audioPlayer.play(AssetSource('calm.mp3'));
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (_seconds > 0) {
         setState(() {
           _seconds--;
         });
       } else {
-        _timer.cancel();
+        _timer?.cancel();
         _audioPlayer.stop();
         setState(() {
           isActive = false;
@@ -88,7 +94,7 @@ class _MeditationTimerState extends State<MeditationTimer> {
 
   void _pauseResumeTimer() {
     if (isActive) {
-      _timer.cancel();
+      _timer?.cancel();
       _audioPlayer.pause();
     } else {
       _startTimer(_seconds);
@@ -100,7 +106,7 @@ class _MeditationTimerState extends State<MeditationTimer> {
   }
 
   void _resetTimer() {
-    _timer.cancel();
+    _timer?.cancel();
     _audioPlayer.stop();
     setState(() {
       _seconds = 0;
@@ -121,7 +127,26 @@ class _MeditationTimerState extends State<MeditationTimer> {
     return Scaffold(
       backgroundColor: cream,
       appBar: AppBar(
-        title: Text(widget.meditationType),
+        automaticallyImplyLeading: false,
+        title: Text(
+          widget.meditationType,
+          style: GoogleFonts.montserrat(
+            fontSize: 22,
+            letterSpacing: 1,
+            fontWeight: FontWeight.w600,
+            color: black,
+          ),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            size: 32,
+            color: Colors.black,
+          ),
+        ),
         backgroundColor: meditationColor,
       ),
       body: Center(
@@ -135,7 +160,9 @@ class _MeditationTimerState extends State<MeditationTimer> {
                   width: 250,
                   height: 250,
                   child: CircularProgressIndicator(
-                    value: _totalSeconds == 0 ? 0 : (_totalSeconds - _seconds) / _totalSeconds,
+                    value: _totalSeconds == 0
+                        ? 0
+                        : (_totalSeconds - _seconds) / _totalSeconds,
                     strokeWidth: 10,
                     backgroundColor: Colors.grey[300],
                     valueColor: AlwaysStoppedAnimation<Color>(meditationColor),
@@ -144,17 +171,20 @@ class _MeditationTimerState extends State<MeditationTimer> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(meditationIcon, size: 60, color: meditationColor),
-                    SizedBox(height: 10),
+                    Lottie.asset(meditationIcon, width: 100, height: 100),
+                    const SizedBox(height: 10),
                     Text(
                       _formatTime(_seconds),
-                      style: GoogleFonts.montserrat(fontSize: 40, fontWeight: FontWeight.bold, color: meditationColor),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: meditationColor),
                     ),
                   ],
                 ),
               ],
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: presetTimes.map((time) {
@@ -162,26 +192,35 @@ class _MeditationTimerState extends State<MeditationTimer> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: ElevatedButton(
                     onPressed: () => _startTimer(time),
-                    child: Text('${time ~/ 60} min', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w800)),
-                    style: ElevatedButton.styleFrom(backgroundColor: meditationColor),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: meditationColor),
+                    child: Text('${time ~/ 60} min',
+                        style: const TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w800)),
                   ),
                 );
               }).toList(),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   onPressed: _seconds > 0 ? _pauseResumeTimer : null,
-                  child: Text(isActive ? 'Pause' : 'Resume', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w800)),
-                  style: ElevatedButton.styleFrom(backgroundColor: meditationColor),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: meditationColor),
+                  child: Text(isActive ? 'Pause' : 'Resume',
+                      style: const TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w800)),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 ElevatedButton(
-                  onPressed: _resetTimer,
-                  child: Text('Reset', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w800)),
-                  style: ElevatedButton.styleFrom(backgroundColor: meditationColor),
+                  onPressed: _seconds > 0 ? _resetTimer : null,
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: meditationColor),
+                  child: const Text('Reset',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w800)),
                 ),
               ],
             ),

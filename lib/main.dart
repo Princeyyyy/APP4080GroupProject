@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class NavigationPage extends StatefulWidget {
-  const NavigationPage({Key? key}) : super(key: key);
+  const NavigationPage({super.key});
 
   @override
   State<NavigationPage> createState() => _NavigationPageState();
@@ -52,6 +52,7 @@ class NavigationPage extends StatefulWidget {
 
 class _NavigationPageState extends State<NavigationPage> {
   int currentIndex = 0;
+
   //Pages
   final screens = [
     const HomePage(),
@@ -72,27 +73,33 @@ class _NavigationPageState extends State<NavigationPage> {
         items: [
           FlashyTabBarItem(
             icon: const Icon(CupertinoIcons.home),
-            title: Text("Home",
-                style: GoogleFonts.montserrat(
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.w600,
-                )),
+            title: Text(
+              "Home",
+              style: GoogleFonts.montserrat(
+                letterSpacing: 1,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           FlashyTabBarItem(
             icon: const Icon(CupertinoIcons.music_note),
-            title: Text("Meditation",
-                style: GoogleFonts.montserrat(
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.w600,
-                )),
+            title: Text(
+              "Meditation",
+              style: GoogleFonts.montserrat(
+                letterSpacing: 1,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
           FlashyTabBarItem(
             icon: const Icon(CupertinoIcons.calendar),
-            title: Text("Calendar",
-                style: GoogleFonts.montserrat(
-                  letterSpacing: 1,
-                  fontWeight: FontWeight.w600,
-                )),
+            title: Text(
+              "Calendar",
+              style: GoogleFonts.montserrat(
+                letterSpacing: 1,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
